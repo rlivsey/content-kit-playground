@@ -62,7 +62,16 @@ export default Ember.Controller.extend({
     },
 
     editorChanged(content) {
-      this.set("editorContent", content);
+      this._lastChanged = (new Date()).getTime();
+
+      const firebase = new window.Firebase("https://mbscratch.firebaseio.com/");
+      const ref      = firebase.child("editors").child("editor");
+      ref.set({
+        content: JSON.stringify(content),
+        version: this._lastChanged
+      });
+
+      this.set("_editorContent", content);
     },
 
     clearStorage() {

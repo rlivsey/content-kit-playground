@@ -22,7 +22,7 @@
     Shift-enter should still create a new line.
   </p>
 
-  {{content-kit-editor on-key-down=(action "captureEnter")}}
+  {{my-content-kit-editor on-key-down=(action "captureEnter")}}
 
   {{#if enterCaptured}}
     <p>Enter captured</p>
