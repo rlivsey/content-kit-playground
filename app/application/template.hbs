@@ -7,9 +7,9 @@
     This saves content to Firebase on-change and also reacts to changes in Firebase.
   </p>
 
-  {{content-kit-editor mobiledoc=editorContent on-change=(action "editorChanged")}}
+  {{my-content-kit-editor mobiledoc=editorContent on-change=(action "editorChanged")}}
 
-  <pre>{{stringify-json editorContent}}</pre>
+  <pre>{{stringify-json _editorContent}}</pre>
 </div>
 
 <div class="experiment">

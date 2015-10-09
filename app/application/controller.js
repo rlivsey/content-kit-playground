@@ -14,19 +14,21 @@ export default Ember.Controller.extend({
     get() {
       const firebase = new window.Firebase("https://mbscratch.firebaseio.com/");
       const ref      = firebase.child("editors").child("editor");
-      ref.on("value", snap => {
-        // TODO - don't set if it's the same as existing content?
-        this.set("editorContent", JSON.parse(snap.val()));
-      });
+      ref.on("value", snap => this.editorContentChangedInFirebase(snap.val()) );
       return;
     },
     set(_, v) {
-      const firebase = new window.Firebase("https://mbscratch.firebaseio.com/");
-      const ref      = firebase.child("editors").child("editor");
-      ref.set(JSON.stringify(v));
       return v;
     }
   }),
+
+  editorContentChangedInFirebase({ content, version }) {
+    const doc = JSON.parse(content);
+    if (version !== this._lastChanged) {
+      this.set("editorContent", doc);
+      this.set("_editorContent", doc);
+    }
+  },
 
   actions: {
     captureEnter(e) {
