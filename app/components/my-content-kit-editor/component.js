@@ -25,5 +25,10 @@ export default ContentKitEditorComponent.extend({
       this._myLastEditor = editor;
       this.setupEditor();
     }
+  },
+
+  didInsertElement() {
+    this._super();
+    this.sendAction("register", this);
   }
 });

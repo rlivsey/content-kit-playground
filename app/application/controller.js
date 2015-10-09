@@ -9,6 +9,7 @@ export default Ember.Controller.extend({
 
   enterCaptured: false,
   tabCaptured: false,
+  editorToFocus: null,
 
   editorContent: Ember.computed({
     get() {
@@ -31,6 +32,10 @@ export default Ember.Controller.extend({
   },
 
   actions: {
+    registerEditor(editor) {
+      this.set("editorToFocus", editor);
+    },
+
     captureEnter(e) {
       // could/should this be/act like a native event so we can stop
       // enter from taking effect?
@@ -56,11 +61,17 @@ export default Ember.Controller.extend({
     },
 
     focusStart() {
-      console.log("somehow focus the start of the editor");
+      const editorComponent = this.get("editorToFocus");
+      const editor = editorComponent.get("editor");
+      const firstSection = editor.post.sections.toArray()[0];
+      editor.cursor.moveToSection(firstSection, 0);
     },
 
     focusEnd() {
-      console.log("somehow focus the end of the editor");
+      const editorComponent = this.get("editorToFocus");
+      const editor = editorComponent.get("editor");
+      const lastSection = editor.post.sections.toArray().pop();
+      editor.cursor.moveToSection(lastSection, lastSection.length);
     },
 
     editorChanged(content) {
