@@ -10,6 +10,24 @@ export default Ember.Controller.extend({
   enterCaptured: false,
   tabCaptured: false,
 
+  editorContent: Ember.computed({
+    get() {
+      const firebase = new window.Firebase("https://mbscratch.firebaseio.com/");
+      const ref      = firebase.child("editors").child("editor");
+      ref.on("value", snap => {
+        // TODO - don't set if it's the same as existing content?
+        this.set("editorContent", JSON.parse(snap.val()));
+      });
+      return;
+    },
+    set(_, v) {
+      const firebase = new window.Firebase("https://mbscratch.firebaseio.com/");
+      const ref      = firebase.child("editors").child("editor");
+      ref.set(JSON.stringify(v));
+      return v;
+    }
+  }),
+
   actions: {
     captureEnter(e) {
       // could/should this be/act like a native event so we can stop
@@ -43,9 +61,8 @@ export default Ember.Controller.extend({
       console.log("somehow focus the end of the editor");
     },
 
-    'save-doc'(name, content) {
-      const json = JSON.stringify(content);
-      window.localStorage.setItem(`editor-${name}`, json);
+    editorChanged(content) {
+      this.set("editorContent", content);
     },
 
     clearStorage() {

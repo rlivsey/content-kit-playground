@@ -1,15 +1,15 @@
 <h1>Content Kit Experiments</h1>
 
 <div class="experiment">
-  <h2>Persist content as JSON</h2>
+  <h2>Persist content to Firebase</h2>
 
   <p>
-    All editors are hooked up to persist &amp; load content to local storage as JSON.
+    This saves content to Firebase on-change and also reacts to changes in Firebase.
   </p>
 
-  <p>
-    <button {{action (action "clearStorage")}}>Clear content</button>
-  </p>
+  {{content-kit-editor mobiledoc=editorContent on-change=(action "editorChanged")}}
+
+  <pre>{{stringify-json editorContent}}</pre>
 </div>
 
 <div class="experiment">
@@ -22,11 +22,7 @@
     Shift-enter should still create a new line.
   </p>
 
-  {{content-kit-editor
-    mobiledoc=(load-doc "enter")
-    on-change=(action "save-doc" "enter")
-    on-key-down=(action "captureEnter")
-  }}
+  {{content-kit-editor on-key-down=(action "captureEnter")}}
 
   {{#if enterCaptured}}
     <p>Enter captured</p>
@@ -41,10 +37,7 @@
     Pressing tab should trigger an action &amp; and not move focus.
   </p>
 
-  {{content-kit-editor
-    mobiledoc=(load-doc "tab")
-    on-change=(action "save-doc" "tab")
-    on-key-down=(action "captureTab")
+  {{content-kit-editor on-key-down=(action "captureTab")
   }}
 
   {{#if tabCaptured}}
@@ -74,18 +67,9 @@
       These could be sub-classes with extra behaviour or something if needed?
       {{content-kit-group-editor}}
     --}}
-    {{content-kit-editor
-      mobiledoc=(load-doc "cursor-1")
-      on-change=(action "save-doc" "cursor-1")
-    }}
-    {{content-kit-editor
-      mobiledoc=(load-doc "cursor-2")
-      on-change=(action "save-doc" "cursor-2")
-    }}
-    {{content-kit-editor
-      mobiledoc=(load-doc "cursor-3")
-      on-change=(action "save-doc" "cursor-3")
-    }}
+    {{content-kit-editor}}
+    {{content-kit-editor}}
+    {{content-kit-editor}}
   {{/content-kit-group}}
 </div>
 
@@ -101,9 +85,6 @@
     <button {{action (action "focusEnd")}}>Focus End</button>
   </p>
 
-  {{content-kit-editor
-    mobiledoc=(load-doc "focus")
-    on-change=(action "save-doc" "focus")
-  }}
+  {{content-kit-editor}}
 
 </div>
