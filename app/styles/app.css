@@ -1,0 +1,9 @@
+body {
+  font-family: Helvetica, sans-serif;
+}
+
+.experiment {
+  margin-bottom: 20px;
+  border: 1px solid #CCC;
+  padding: 0 20px;
+}
