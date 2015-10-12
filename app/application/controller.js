@@ -10,6 +10,7 @@ export default Ember.Controller.extend({
   enterCaptured: false,
   tabCaptured: false,
   editorToFocus: null,
+  cursorExit: null,
 
   editorContent: Ember.computed({
     get() {
@@ -36,28 +37,12 @@ export default Ember.Controller.extend({
       this.set("editorToFocus", editor);
     },
 
-    captureEnter(e) {
-      // could/should this be/act like a native event so we can stop
-      // enter from taking effect?
-      if (e.keyCode === KEY_CODES.enter && !e.shiftKey) {
-        this.set("enterCaptured", true);
-        e.preventDefault();
-      } else {
-        this.set("enterCaptured", false);
-      }
+    captureEnter() {
+      this.set("enterCaptured", true);
     },
 
-    captureTab(e) {
-      if (e.keyCode === KEY_CODES.tab) {
-        if (e.shiftKey) {
-          this.set("tabCaptured", "indented");
-        } else {
-          this.set("tabCaptured", "outdented");
-        }
-        e.preventDefault();
-      } else {
-        this.set("tabCaptured", false);
-      }
+    captureTab() {
+      this.set("tabCaptured", true);
     },
 
     focusStart() {
@@ -94,6 +79,10 @@ export default Ember.Controller.extend({
         }
       }
       window.location.reload();
+    },
+
+    cursorExit(dir) {
+      this.set("cursorExit", dir);
     }
   }
 
