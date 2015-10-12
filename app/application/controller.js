@@ -1,10 +1,5 @@
 import Ember from 'ember';
 
-const KEY_CODES = {
-  enter: 13,
-  tab:  9
-};
-
 export default Ember.Controller.extend({
 
   enterCaptured: false,
@@ -32,17 +27,28 @@ export default Ember.Controller.extend({
     }
   },
 
+  setForAMoment(key, value) {
+    this.set(key, value);
+    Ember.run.later(() => {
+      this.set(key, false);
+    }, 1000);
+  },
+
   actions: {
     registerEditor(editor) {
       this.set("editorToFocus", editor);
     },
 
     captureEnter() {
-      this.set("enterCaptured", true);
+      this.setForAMoment("enterCaptured", true);
     },
 
     captureTab() {
-      this.set("tabCaptured", true);
+      this.setForAMoment("tabCaptured", true);
+    },
+
+    cursorExit(dir) {
+      this.setForAMoment("cursorExit", dir);
     },
 
     focusStart() {
@@ -79,10 +85,6 @@ export default Ember.Controller.extend({
         }
       }
       window.location.reload();
-    },
-
-    cursorExit(dir) {
-      this.set("cursorExit", dir);
     }
   }
 
