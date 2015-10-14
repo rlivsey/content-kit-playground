@@ -1,14 +1,5 @@
 import ContentKitEditorComponent from 'ember-content-kit/components/content-kit-editor/component';
 
-const KEY_CODES = {
-  enter:     13,
-  tab:       9,
-  left:      37,
-  up:        38,
-  right:     39,
-  down:      40,
-};
-
 import {
   isOnFirstLine,
   isOnLastLine,
@@ -24,55 +15,61 @@ export default ContentKitEditorComponent.extend({
     const component = this;
 
     editor.registerKeyCommand({
-      check(e) {
-        return e.keyCode === KEY_CODES.enter;
-      },
+      str: "enter",
       run(/* editor */) {
+        if (!component.get("enter")) {
+          return false;
+        }
         component.sendAction("enter");
       }
     });
 
     editor.registerKeyCommand({
-      check(e) {
-        return e.keyCode === KEY_CODES.tab;
-      },
+      str: "tab",
       run(/* editor */) {
+        if (!component.get("tab")) {
+          return false;
+        }
         component.sendAction("tab");
       }
     });
 
     editor.registerKeyCommand({
-      check(e) {
-        return e.keyCode === KEY_CODES.up && isOnFirstLine(editor);
-      },
-      run(/* editor */) {
+      str: "up",
+      run(editor) {
+        if (!isOnFirstLine(editor)) {
+          return false;
+        }
         component.sendAction("exit-up");
       }
     });
 
     editor.registerKeyCommand({
-      check(e) {
-        return e.keyCode === KEY_CODES.down && isOnLastLine(editor);
-      },
-      run(/* editor */) {
+      str: "down",
+      run(editor) {
+        if (!isOnLastLine(editor)) {
+          return false;
+        }
         component.sendAction("exit-down");
       }
     });
 
     editor.registerKeyCommand({
-      check(e) {
-        return e.keyCode === KEY_CODES.left && isAtStartOfFirstLine(editor);
-      },
-      run(/* editor */) {
+      str: "left",
+      run(editor) {
+        if (!isAtStartOfFirstLine(editor)) {
+          return false;
+        }
         component.sendAction("exit-left");
       }
     });
 
     editor.registerKeyCommand({
-      check(e) {
-        return e.keyCode === KEY_CODES.right && isAtEndOfLastLine(editor);
-      },
-      run(/* editor */) {
+      str: "right",
+      run(editor) {
+        if (!isAtEndOfLastLine(editor)) {
+          return false;
+        }
         component.sendAction("exit-right");
       }
     });
